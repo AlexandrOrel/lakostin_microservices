@@ -54,3 +54,47 @@ delete all images (only if running containers don't depend on them)
 
 ```docker rmi $(docker images -q)```
 
+## HW15
+
+Install docker-machine
+
+[https://docs.docker.com/machine/install-machine/]
+
+Create new project docker-194911 in GCP
+
+Create new configuraion
+
+```gcloud init```
+
+```gcloud auth application-default login```
+
+Check if google docker-machine is running
+
+```docker-machine ls```
+
+Set up the environment for the Docker client
+
+```eval $(docker-machine env docker-host)```
+
+
+```docker run --rm -ti tehbilly/htop```
+
+```docker run --rm --pid host -ti tehbilly/htop```
+
+Prepare Dockerfile
+
+```docker build -t reddit:latest .```
+
+Show all images (with intermediate ones)
+
+```docker images -a```
+
+```docker run --name reddit -d --network=host reddit:latest```
+
+Register at Docker Hub
+
+```docker login```
+
+```docker tag reddit:latest mrkostin/otus-reddit:1.0```
+
+```docker push mrkostin/otus-reddit:1.0```
