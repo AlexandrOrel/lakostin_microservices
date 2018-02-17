@@ -76,6 +76,9 @@ Set up the environment for the Docker client
 
 ```eval $(docker-machine env docker-host)```
 
+Check environment
+
+```env | grep DOCKER```
 
 ```docker run --rm -ti tehbilly/htop```
 
@@ -102,6 +105,12 @@ Register at Docker Hub
 ## HW16
 
 Download zip archive
+
+Install Dockerfile Linter [https://github.com/hadolint/hadolint]
+
+Usage:
+
+```hadolint-Linux-x86_64 ui/Dockerfile```
 
 Create 3 Dockerfiles
 
@@ -138,3 +147,16 @@ Start App with rewriting ENV variables
 
 ----------
 
+Rebuild UI:
+
+```docker build -t mrkostin/ui:2.0 ./ui```
+
+Alpine UI:
+
+```docker build -t mrkostin/ui:2.1 ./ui```
+
+
+```docker volume create reddit_db```
+
+```docker run -d --network=reddit --network-alias=post_db \
+--network-alias=comment_db -v reddit_db:/data/db mongo:latest```
