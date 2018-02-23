@@ -265,3 +265,91 @@ Docker-compose.override.yml
 ```docker-machine scp -r comment/ docker-host:~/apps/comment/ && \```
 ```docker-machine scp -r post-py/ docker-host:~/apps/post-py/ && \```
 ```docker-machine scp -r ui/ docker-host:~/apps/ui/ ```
+
+
+## HW19
+
+Gitlab CI
+
+[https://docs.gitlab.com/omnibus/README.html]
+
+[https://docs.gitlab.com/omnibus/docker/README.html]
+
+[https://docs.gitlab.com/omnibus/docker/README.html#install-gitlab-using-docker-compose]
+
+[https://docs.gitlab.com/ce/install/requirements.html]
+
+```gcloud_create_gitlab_docker_machine_with_fw_rules.sh```
+
+```eval $(docker-machine env gitlab-ci)```
+
+-----
+Install docker on Ubuntu:
+
+```curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -```
+
+```add-apt-repository "deb https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"```
+
+```apt-get update```
+
+```apt-get install docker-ce docker-compose```
+-----
+
+```docker-machine ssh gitlab-ci```
+
+```mkdir -p /srv/gitlab/config /srv/gitlab/data /srv/gitlab/logs```
+
+```docker-compose up -d```
+
+Add remote to remote lakostin_microservices:
+
+```git remote add gitlab http://35.205.90.172/homework/example.git```
+
+```git push gitlab docker-6```
+
+
+```git add .gitlab-ci.yml```
+
+```git commit -m 'add pipeline definition'```
+
+```git push gitlab docker-6```
+
+```docker run -d --name gitlab-runner --restart always \ ```
+```-v /srv/gitlab-runner/config:/etc/gitlab-runner \ ```
+```-v /var/run/docker.sock:/var/run/docker.sock \ ```
+```gitlab/gitlab-runner:latest ```
+
+```docker exec -it gitlab-runner gitlab-runner register```
+
+Please enter the gitlab-ci coordinator URL (e.g. https://gitlab.com/):
+http://<YOUR-VM-IP>/
+Please enter the gitlab-ci token for this runner:
+<TOKEN>
+Please enter the gitlab-ci description for this runner:
+[38689f5588fe]: my-runner
+Please enter the gitlab-ci tags for this runner (comma separated):
+linux,xenial,ubuntu,docker
+Whether to run untagged builds [true/false]:
+[false]: true
+Whether to lock the Runner to current project [true/false]:
+[true]: false
+Please enter the executor:
+docker
+Please enter the default Docker image (e.g. ruby:2.1):
+alpine:latest
+Runner registered successfully.
+
+
+```git clone https://github.com/express42/reddit.git && rm -rf ./reddit/.git```
+
+```git add reddit/```
+
+```git commit -m "Add reddit app"```
+
+```git push gitlab docker-6```
+
+```git commit -m "update gitlab-ci & add simpletest.rb and add Gem"```
+
+Integration with Slack:
+
+[https://gitlab.com/help/user/project/integrations/slack.md]
