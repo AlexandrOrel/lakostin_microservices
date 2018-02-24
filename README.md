@@ -374,4 +374,37 @@ Create file monitoring/gcloud.sh
 
 ```docker run --rm -p 9090:9090 -d --name prometheus prom/prometheus:v2.1.0```
 
+Build custom Prometheus image
 
+```export USER_NAME=mrkostin```
+
+```docker build -t $USER_NAME/prometheus:v2.1.0 .```
+
+```for i in ui post-py comment; do cd src/$i; bash docker_build.sh; cd -; done```
+
+
+```docker-compose stop post```
+
+```docker-compose start post```
+
+Rebuild prometheus, then
+
+```docker-compose down && docker-compose up -d```
+
+Load docker-host:
+
+```docker-machine ssh vm1```
+
+```yes > /dev/null```
+
+Push images
+
+```docker login```
+
+```for i in mrkostin/prometheus:v2.1.0 mrkostin/comment:latest \```
+```mrkostin/post:latest mrkostin/ui:latest; do docker push $i; done;```
+
+
+```docker-machine rm vm1```
+
+[https://hub.docker.com/r/mrkostin/]
