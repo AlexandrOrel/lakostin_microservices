@@ -366,3 +366,11 @@ Integration with Slack:
 ```git tag 2.4.10```
 
 ```git push gitlab2 docker-7 --tags```
+
+## HW21
+
+Create file monitoring/gcloud.sh
+
+```docker run --rm -p 9090:9090 -d --name prometheus prom/prometheus:v2.1.0```
+
+
