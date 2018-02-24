@@ -293,6 +293,7 @@ Install docker on Ubuntu:
 ```apt-get update```
 
 ```apt-get install docker-ce docker-compose```
+
 -----
 
 ```docker-machine ssh gitlab-ci```
