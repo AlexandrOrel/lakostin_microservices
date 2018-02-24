@@ -164,15 +164,15 @@ Alpine UI:
 
 ## HW17
 
-```docker run --network none --rm -d --name net_test \
- joffotron/docker-net-tools -c "sleep 100"```
+```docker run --network none --rm -d --name net_test \```
+``` joffotron/docker-net-tools -c "sleep 100"```
 
 loopback only:
 
 ```docker exec -ti net_test ifconfig```
 
-```docker run --network host --rm -d --name net_test \
- joffotron/docker-net-tools -c "sleep 100"```
+```docker run --network host --rm -d --name net_test \```
+``` joffotron/docker-net-tools -c "sleep 100"```
 
 
 ```docker exec -ti net_test ifconfig```
