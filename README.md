@@ -408,3 +408,34 @@ Push images
 ```docker-machine rm vm1```
 
 [https://hub.docker.com/r/mrkostin/]
+
+
+## HW23
+
+Create VM
+
+```./monitoring/gcloud.sh```
+
+# configure local env
+```eval $(docker-machine env vm1)```
+
+```docker-compose up -d
+
+```docker-compose -f docker-compose-monitoring.yml up -d```
+
+```export USER_NAME=mrkostin```
+
+```docker build -t $USER_NAME/prometheus:v2.1.0 .```
+
+```docker-compose -f docker-compose-monitoring.yml up -d grafana```
+
+```docker build -t $USER_NAME/alertmanager .```
+
+Test alerting
+
+```docker-compose stop post```
+
+```for i in mrkostin/prometheus:v2.1.0 mrkostin/comment:latest \```
+```mrkostin/post:latest mrkostin/ui:latest mrkostin/alertmanager:latest; do docker push $i; done;```
+
+```docker-machine rm vm1```
