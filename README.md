@@ -158,8 +158,8 @@ Alpine UI:
 
 ```docker volume create reddit_db```
 
-```docker run -d --network=reddit --network-alias=post_db \
---network-alias=comment_db -v reddit_db:/data/db mongo:latest```
+```docker run -d --network=reddit --network-alias=post_db \ ```
+```--network-alias=comment_db -v reddit_db:/data/db mongo:latest```
 
 
 ## HW17
