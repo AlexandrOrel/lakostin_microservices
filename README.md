@@ -160,3 +160,108 @@ Alpine UI:
 
 ```docker run -d --network=reddit --network-alias=post_db \
 --network-alias=comment_db -v reddit_db:/data/db mongo:latest```
+
+
+## HW17
+
+```docker run --network none --rm -d --name net_test \
+ joffotron/docker-net-tools -c "sleep 100"```
+
+loopback only:
+
+```docker exec -ti net_test ifconfig```
+
+```docker run --network host --rm -d --name net_test \
+ joffotron/docker-net-tools -c "sleep 100"```
+
+
+```docker exec -ti net_test ifconfig```
+
+```docker-machine ssh docker-host ifconfig```
+
+Run
+
+```sudo ln -s /var/run/docker/netns /var/run/netns```
+
+...to see existing net-namespaces:
+
+```sudo ip netns```
+
+Run commands in chosen namespace:
+
+```ip netns exec <namespace> <command>```
+
+
+```docker network create reddit --driver bridge```
+
+```docker run -d --network=reddit --network-alias=post_db --network-alias=comment_db mongo:latest```
+
+```docker run -d --network=reddit --network-alias=post mrkostin/post:1.0```
+
+```docker run -d --network=reddit --network-alias=comment mrkostin/comment:1.0```
+
+```docker run -d --network=reddit -p 9292:9292 mrkostin/ui:1.0```
+
+
+Run containers within two different networks:
+
+```docker network create back_net --subnet=10.0.2.0/24```
+
+```docker network create front_net --subnet=10.0.1.0/24```
+
+```docker run -d --network=back_net --name mongo_db --network-alias=post_db --network-alias=comment_db mongo:latest```
+
+```docker run -d --network=back_net --name post mrkostin/post:1.0```
+
+```docker run -d --network=back_net --name comment mrkostin/comment:1.0```
+
+```docker run -d --network=front_net -p 9292:9292 --name ui mrkostin/ui:1.0```
+
+```docker network connect front_net post```
+
+```docker network connect front_net comment```
+
+-----
+
+Docker networks:
+
+```docker-machine ssh docker-host```
+
+```sudo apt-get update && sudo apt-get install bridge-utils```
+
+```sudo docker network ls```
+
+```ifconfig | grep br```
+
+```brctl show <interface>```
+
+```sudo iptables -nL -t nat```
+
+```ps ax | grep docker-proxy```
+
+-----
+Docker-compose:
+
+https://docs.docker.com/compose/install/#install-compose)
+or
+
+```pip install docker-compose```
+
+```export USERNAME=mrkostin```
+
+```docker-compose up -d```
+
+
+Docker-compose.override.yml
+
+[https://docs.docker.com/machine/reference/scp/#specifying-file-paths-for-remote-deployments]
+
+[https://docs.docker.com/storage/volumes/]
+
+```docker-machine ssh docker-host```
+
+```mkdir apps/ && mkdir apps/comment/ && mkdir apps/ui && mkdir apps/post-py```
+
+```docker-machine scp -r comment/ docker-host:~/apps/comment/ && \```
+```docker-machine scp -r post-py/ docker-host:~/apps/post-py/ && \```
+```docker-machine scp -r ui/ docker-host:~/apps/ui/ ```
