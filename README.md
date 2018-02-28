@@ -353,3 +353,16 @@ Runner registered successfully.
 Integration with Slack:
 
 [https://gitlab.com/help/user/project/integrations/slack.md]
+
+
+## HW20
+
+```git remote add gitlab2 http://35.205.90.172/homework/example2.git```
+
+```git push gitlab2 docker-7```
+
+```git commit -m "test pipeline with tags"```
+
+```git tag 2.4.10```
+
+```git push gitlab2 docker-7 --tags```
