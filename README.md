@@ -158,21 +158,21 @@ Alpine UI:
 
 ```docker volume create reddit_db```
 
-```docker run -d --network=reddit --network-alias=post_db \
---network-alias=comment_db -v reddit_db:/data/db mongo:latest```
+```docker run -d --network=reddit --network-alias=post_db \ ```
+```--network-alias=comment_db -v reddit_db:/data/db mongo:latest```
 
 
 ## HW17
 
-```docker run --network none --rm -d --name net_test \
- joffotron/docker-net-tools -c "sleep 100"```
+```docker run --network none --rm -d --name net_test \```
+``` joffotron/docker-net-tools -c "sleep 100"```
 
 loopback only:
 
 ```docker exec -ti net_test ifconfig```
 
-```docker run --network host --rm -d --name net_test \
- joffotron/docker-net-tools -c "sleep 100"```
+```docker run --network host --rm -d --name net_test \```
+``` joffotron/docker-net-tools -c "sleep 100"```
 
 
 ```docker exec -ti net_test ifconfig```
@@ -293,6 +293,7 @@ Install docker on Ubuntu:
 ```apt-get update```
 
 ```apt-get install docker-ce docker-compose```
+
 -----
 
 ```docker-machine ssh gitlab-ci```
@@ -366,3 +367,44 @@ Integration with Slack:
 ```git tag 2.4.10```
 
 ```git push gitlab2 docker-7 --tags```
+
+## HW21
+
+Create file monitoring/gcloud.sh
+
+```docker run --rm -p 9090:9090 -d --name prometheus prom/prometheus:v2.1.0```
+
+Build custom Prometheus image
+
+```export USER_NAME=mrkostin```
+
+```docker build -t $USER_NAME/prometheus:v2.1.0 .```
+
+```for i in ui post-py comment; do cd src/$i; bash docker_build.sh; cd -; done```
+
+
+```docker-compose stop post```
+
+```docker-compose start post```
+
+Rebuild prometheus, then
+
+```docker-compose down && docker-compose up -d```
+
+Load docker-host:
+
+```docker-machine ssh vm1```
+
+```yes > /dev/null```
+
+Push images
+
+```docker login```
+
+```for i in mrkostin/prometheus:v2.1.0 mrkostin/comment:latest \```
+```mrkostin/post:latest mrkostin/ui:latest; do docker push $i; done;```
+
+
+```docker-machine rm vm1```
+
+[https://hub.docker.com/r/mrkostin/]

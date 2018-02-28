@@ -1,0 +1,14 @@
+version: '3.3'
+services:
+  ui:
+    command: "puma --debug -w 2"
+    #volumes:
+     # - /home/docker-user/apps/ui/:/app/ui/
+  #post:
+    #volumes:
+     # - /home/docker-user/apps/post-py/:/app/post-py/
+  comment:
+    command: "puma --debug -w 2"
+    #volumes:
+     # - /home/docker-user/apps/comment/:/app/comment/
+
