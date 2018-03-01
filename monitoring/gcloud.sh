@@ -12,13 +12,10 @@ docker-machine create --driver google \
   --google-machine-type n1-standard-1 \
     vm1
 
-# configure local env
-eval $(docker-machine env vm1)
-
-docker run --rm -p 9090:9090 -d --name prometheus  prom/prometheus
-
 docker-machine ip vm1
 
-docker stop prometheus
+gcloud compute firewall-rules create cadvisor-default --allow tcp:8080
 
-#35.192.5.205
+gcloud compute firewall-rules create grafana-default --allow tcp:3000
+
+gcloud compute firewall-rules create alertmanager-default --allow tcp:9093
