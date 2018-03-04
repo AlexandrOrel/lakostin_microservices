@@ -452,3 +452,22 @@ Updated /src
 
 ```eval $(docker-machine env vm1)```
 
+```docker-compose logs -f post```
+
+```docker-compose -f docker-compose-logging.yml up -d```
+
+```docker-compose -f docker-compose-logging.yml up -d --build```
+
+```docker-compose stop ui```
+
+```docker-compose rm ui```
+
+```docker-compose up -d```
+
+Пример с rexexp:
+
+<filter service.ui>
+  @type parser
+  format /\[(?<time>[^\]]*)\]  (?<level>\S+) (?<user>\S+)[\W]*service=(?<service>\S+)[\W]*event=(?<event>\S+)[\W]*(?:path=(?<path>\S+)[\W]*)?request_id=(?<request_id>\S+)[\W]*(?:remote_addr=(?<remote_addr>\S+)[\W]*)?(?:method= (?<method>\S+)[\W]*)?(?:response_status=(?<response_status>\S+)[\W]*)?(?:message='(?<message>[^\']*)[\W]*)?/
+  key_name log
+</filter>
