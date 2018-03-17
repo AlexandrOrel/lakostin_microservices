@@ -30,3 +30,4 @@ networks:
   front_net:
     external:
       name: docker_front_net
+
