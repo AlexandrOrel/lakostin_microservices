@@ -15,5 +15,5 @@ spec:
         app: ui
     spec:
       containers:
-      - image: mrkostin/ui
+      - image: mrkostin/ui:latest
         name: ui

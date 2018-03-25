@@ -15,5 +15,5 @@ spec:
         app: post
     spec:
       containers:
-      - image: mrkostin/post
+      - image: mrkostin/post:latest
         name: post
