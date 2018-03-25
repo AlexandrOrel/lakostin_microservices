@@ -19,3 +19,14 @@ gcloud compute firewall-rules create cadvisor-default --allow tcp:8080
 gcloud compute firewall-rules create grafana-default --allow tcp:3000
 
 gcloud compute firewall-rules create alertmanager-default --allow tcp:9093
+
+gcloud compute firewall-rules create fluentd-tcp-default --allow tcp:24224
+
+gcloud compute firewall-rules create fluentd-udp-default --allow udp:24224
+
+gcloud compute firewall-rules create elasticsearch-default --allow tcp:9200
+
+gcloud compute firewall-rules create kibana-default --allow tcp:5601
+
+gcloud compute firewall-rules create zipkin-default --allow tcp:9411
+

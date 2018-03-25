@@ -2,9 +2,9 @@
 
 ## HW14
 
-[https://docs.docker.com/install/linux/docker-ce/fedora/#install-docker-ce-1]
+https://docs.docker.com/install/linux/docker-ce/fedora/#install-docker-ce-1
 
-[https://docs.docker.com/install/linux/linux-postinstall/#manage-docker-as-a-non-root-user]
+https://docs.docker.com/install/linux/linux-postinstall/#manage-docker-as-a-non-root-user
 
 docker client & server version
 
@@ -58,7 +58,7 @@ delete all images (only if running containers don't depend on them)
 
 Install docker-machine
 
-[https://docs.docker.com/machine/install-machine/]
+https://docs.docker.com/machine/install-machine/
 
 Create new project docker-194911 in GCP
 
@@ -106,7 +106,7 @@ Register at Docker Hub
 
 Download zip archive
 
-Install Dockerfile Linter [https://github.com/hadolint/hadolint]
+Install Dockerfile Linter https://github.com/hadolint/hadolint
 
 Usage:
 
@@ -254,9 +254,9 @@ or
 
 Docker-compose.override.yml
 
-[https://docs.docker.com/machine/reference/scp/#specifying-file-paths-for-remote-deployments]
+https://docs.docker.com/machine/reference/scp/#specifying-file-paths-for-remote-deployments
 
-[https://docs.docker.com/storage/volumes/]
+https://docs.docker.com/storage/volumes/
 
 ```docker-machine ssh docker-host```
 
@@ -271,13 +271,13 @@ Docker-compose.override.yml
 
 Gitlab CI
 
-[https://docs.gitlab.com/omnibus/README.html]
+https://docs.gitlab.com/omnibus/README.html
 
-[https://docs.gitlab.com/omnibus/docker/README.html]
+https://docs.gitlab.com/omnibus/docker/README.html
 
-[https://docs.gitlab.com/omnibus/docker/README.html#install-gitlab-using-docker-compose]
+https://docs.gitlab.com/omnibus/docker/README.html#install-gitlab-using-docker-compose
 
-[https://docs.gitlab.com/ce/install/requirements.html]
+https://docs.gitlab.com/ce/install/requirements.html
 
 ```gcloud_create_gitlab_docker_machine_with_fw_rules.sh```
 
@@ -353,7 +353,7 @@ Runner registered successfully.
 
 Integration with Slack:
 
-[https://gitlab.com/help/user/project/integrations/slack.md]
+https://gitlab.com/help/user/project/integrations/slack.md
 
 
 ## HW20
@@ -407,7 +407,7 @@ Push images
 
 ```docker-machine rm vm1```
 
-[https://hub.docker.com/r/mrkostin/]
+https://hub.docker.com/r/mrkostin/
 
 
 ## HW23
@@ -439,3 +439,35 @@ Test alerting
 ```mrkostin/post:latest mrkostin/ui:latest mrkostin/alertmanager:latest; do docker push $i; done;```
 
 ```docker-machine rm vm1```
+
+## HW25
+
+Updated /src
+
+```./monitoring/gcloud.sh```
+
+```export USER_NAME=mrkostin```
+
+```for i in ui post-py comment; do cd src/$i; bash docker_build.sh; cd -; done```
+
+```eval $(docker-machine env vm1)```
+
+```docker-compose logs -f post```
+
+```docker-compose -f docker-compose-logging.yml up -d```
+
+```docker-compose -f docker-compose-logging.yml up -d --build```
+
+```docker-compose stop ui```
+
+```docker-compose rm ui```
+
+```docker-compose up -d```
+
+Пример с rexexp:
+
+<filter service.ui>
+  @type parser
+  format /\[(?<time>[^\]]*)\]  (?<level>\S+) (?<user>\S+)[\W]*service=(?<service>\S+)[\W]*event=(?<event>\S+)[\W]*(?:path=(?<path>\S+)[\W]*)?request_id=(?<request_id>\S+)[\W]*(?:remote_addr=(?<remote_addr>\S+)[\W]*)?(?:method= (?<method>\S+)[\W]*)?(?:response_status=(?<response_status>\S+)[\W]*)?(?:message='(?<message>[^\']*)[\W]*)?/
+  key_name log
+</filter>
