@@ -637,3 +637,71 @@ Create Service Account for dashboard in namespace kube-system
 
 ```kubectl create clusterrolebinding kubernetes-dashboard  \```
 ```--clusterrole=cluster-admin --serviceaccount=kube-system:kubernetes-dashboard```
+
+minikube stop
+
+## HW30
+
+```kubectl scale deployment --replicas 0 -n kube-system kube-dns-autoscaler```
+
+```kubectl scale deployment --replicas 0 -n kube-system kube-dns```
+
+```kubectl exec -ti -n dev post-798d89c5bb-2qcdz ping comment```
+
+```kubectl scale deployment --replicas 1 -n kube-system kube-dns-autoscaler```
+
+
+Set LoadBalancer type for UI service
+
+```kubectl apply -f ui-service.yml -n dev```
+
+```kubectl get service  -n dev --selector component=ui```
+
+```kubectl apply -f ui-ingress.yml -n dev```
+
+```kubectl get ingress -n dev```
+
+```openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout tls.key -out tls.crt -subj "/CN=35.190.68.7"```
+
+```kubectl create secret tls ui-ingress --key tls.key --cert tls.crt -n dev```
+
+```kubectl describe secret ui-ingress -n dev```
+
+```kubectl delete ingress ui -n dev```
+
+```kubectl apply -f ui-ingress.yml -n dev```
+
+Network Policy
+
+```gcloud beta container clusters list```
+
+```gcloud beta container clusters update cluster-1 --zone=europe-west1-d \```
+```  --update-addons=NetworkPolicy=ENABLED```
+
+```gcloud beta container clusters update cluster-1 --zone=europe-west1-d  \```
+```  --enable-network-policy```
+
+```kubectl apply -f mongo-network-policy.yml -n dev```
+
+Create Google Cloud disk
+
+```gcloud compute disks create --size=25GB --zone=europe-west1-d reddit-mongo-disk```
+
+```kubectl apply -f mongo-deployment.yml -n dev```
+
+
+```kubectl delete deploy mongo -n dev```
+
+```kubectl apply -f mongo-deployment.yml -n dev```
+
+kubectl apply -f mongo-volume.yml -n dev
+
+kubectl apply -f mongo-claim.yml -n dev
+
+kubectl describe storageclass standard -n dev
+
+kubectl apply -f storage-fast.yml -n dev
+
+kubectl apply -f mongo-claim-dynamic.yml -n dev
+
+kubectl get persistentvolume -n dev
