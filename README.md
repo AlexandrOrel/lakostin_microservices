@@ -541,3 +541,99 @@ Turn off:
 ```docker inspect $(docker stack ps DEV -q --filter "Name=DEV_ui.1") --format "{{.Status.ContainerStatus.ContainerID}}"```
 
 ```docker stack deploy --compose-file=<(docker-compose -f docker-compose.monitoring.yml -f docker-compose.yml config 2>/dev/null)  DEV```
+
+## HW 29
+
+```curl -Lo minikube https://storage.googleapis.com/minikube/releases/v0.24.1/minikube-linux-amd64 \```
+```&& chmod +x minikube && sudo mv minikube /usr/local/bin/```
+
+```minikube start```
+
+```kubectl get nodes```
+
+```kubectl config current-context```
+
+```kubectl config get-contexts```
+
+```kubectl apply -f ui-deployment.yml```
+
+```kubectl get deployment```
+
+```kubectl get pods --selector component=ui```
+
+```kubectl port-forward <pod-name> 8080:9292```
+
+```kubectapply -f post-deployment.yml```
+
+```kubectl get pods --selector component=post```
+
+```kubectl port-forward <pod-name> 5000:5000```
+
+http://localhost:5000/healthcheck
+
+```kubectapply -f comment-deployment.yml```
+
+```kubectl get pods --selector component=comment```
+
+```kubectl describe service post | grep Endpoints```
+
+```kubectl exec -ti <pod-name> nslookup post```
+
+```kubectl port-forward <pod-name> 8080:9292```
+
+```kubectl logs kubectl logs comment-74b6bcb855-5zqwz```
+
+```kubectl apply -f ./```
+
+
+```kubectl delete -f mongodb-service.yml```
+
+or
+
+```kubectl delete service mongodb```
+
+
+
+```minikube service ui```
+
+```minikube service list```
+
+```minikube addons list```
+
+```minikube addons enable dashboard```
+
+```kubectl get pods```
+
+
+```kubectl get all -n kube-system --selector app=kubernetes-dashboard```
+
+```minikube service kubernetes-dashboard -n kube-system```
+
+```kubectl apply -f dev-namespace.yml```
+
+```kubectl apply -n dev -f ./```
+
+```minikube service ui -n dev```
+
+```kubectl apply -f  ui-deployment.yml -n dev```
+
+# GKE
+
+```gcloud container clusters get-credentials cluster-1 --zone europe-west1-d --project docker-194911```
+
+```kubectl config current-context```
+
+```kubectl apply -f ../Kube/development-namespace.yml```
+
+```kubectl get nodes -o wide```
+
+```kubectl describe service ui  -n dev  | grep NodePort```
+
+```kubectl proxy```
+
+Create Service Account for dashboard in namespace kube-system
+
+`````````
+
+```kubectl create clusterrolebinding kubernetes-dashboard  \```
+```--clusterrole=cluster-admin --serviceaccount=kube-system:kubernetes-dashboard```
