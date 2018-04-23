@@ -471,3 +471,73 @@ Updated /src
   format /\[(?<time>[^\]]*)\]  (?<level>\S+) (?<user>\S+)[\W]*service=(?<service>\S+)[\W]*event=(?<event>\S+)[\W]*(?:path=(?<path>\S+)[\W]*)?request_id=(?<request_id>\S+)[\W]*(?:remote_addr=(?<remote_addr>\S+)[\W]*)?(?:method= (?<method>\S+)[\W]*)?(?:response_status=(?<response_status>\S+)[\W]*)?(?:message='(?<message>[^\']*)[\W]*)?/
   key_name log
 </filter>
+
+## HW 27
+
+```./gcloud_swarm.sh```
+
+```eval $(docker-machine env master-1)```
+
+or
+
+```docker-machine ssh master-1```
+
+```docker swarm init```
+
+additional flag --advertise-addr
+
+Generate token:
+
+```# docker swarm join-token manager/worker```
+
+```eval $(docker-machine env worker-1)```
+
+```docker swarm join --token SWMTKN-1-0qmuelk0usdzu8mt3h20vn6c6e3mh112j1feplqj1q1bt0d9hn-1kvq5wxr78lblrsu21gyxann8 10.132.0.2:2377```
+
+```eval $(docker-machine env worker-2```
+
+```docker swarm join --token SWMTKN-1-0qmuelk0usdzu8mt3h20vn6c6e3mh112j1feplqj1q1bt0d9hn-1kvq5wxr78lblrsu21gyxann8 10.132.0.2:2377```
+
+```eval $(docker-machine env master-1)```
+
+```docker node ls```
+
+
+```docker stack deploy --compose-file docker-compose.yml DEV```
+
+Docker stack doesn't support ENV vars and .env files. Workaround:
+
+```docker stack deploy --compose-file=<(docker-compose -f docker-compose.yml config 2>/dev/null) DEV```
+
+```docker stack services DEV```
+
+```docker node update --label-add reliability=high master-1```
+
+```docker node ls --filter "label=reliability"```
+
+```docker node ls -q | xargs docker node inspect  -f '{{ .ID }} [{{ .Description.Hostname }}]: {{ .Spec.Labels }}'```
+
+```docker stack ps DEV```
+
+```docker stack services DEV```
+
+Scale:
+
+```docker service scale DEV_ui=3```
+
+or
+
+```docker service update --replicas 3 DEV_ui```
+
+Turn off:
+
+```docker service update --replicas 0 DEV_ui```
+
+
+```docker service ps DEV_ui```
+
+```docker-machine ip $(docker-machine ls -q)```
+
+```docker inspect $(docker stack ps DEV -q --filter "Name=DEV_ui.1") --format "{{.Status.ContainerStatus.ContainerID}}"```
+
+```docker stack deploy --compose-file=<(docker-compose -f docker-compose.monitoring.yml -f docker-compose.yml config 2>/dev/null)  DEV```
