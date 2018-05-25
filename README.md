@@ -619,6 +619,20 @@ or
 
 # GKE
 
+```gcloud beta container --project "docker-194911" clusters create "cluster-1" \```
+```  --zone "europe-west1-d" --no-enable-basic-auth --cluster-version "1.8.8-gke.0" \```
+```  --machine-type "g1-small" --image-type "COS" --disk-size "20" \```
+```  --scopes "https://www.googleapis.com/auth/compute",\```
+```"https://www.googleapis.com/auth/devstorage.read_only",\```
+```"https://www.googleapis.com/auth/logging.write",\```
+```"https://www.googleapis.com/auth/monitoring",\```
+```"https://www.googleapis.com/auth/servicecontrol",\```
+```"https://www.googleapis.com/auth/service.management.readonly",\```
+```"https://www.googleapis.com/auth/trace.append" --num-nodes "2"\```
+```  --network "default" --enable-cloud-logging --enable-cloud-monitoring\```
+```  --subnetwork "default" --addons HorizontalPodAutoscaling,HttpLoadBalancing,\```
+```KubernetesDashboard```
+
 ```gcloud container clusters get-credentials cluster-1 --zone europe-west1-d --project docker-194911```
 
 ```kubectl config current-context```
@@ -694,14 +708,115 @@ Create Google Cloud disk
 
 ```kubectl apply -f mongo-deployment.yml -n dev```
 
-kubectl apply -f mongo-volume.yml -n dev
+```kubectl apply -f mongo-volume.yml -n dev```
 
-kubectl apply -f mongo-claim.yml -n dev
+```kubectl apply -f mongo-claim.yml -n dev```
 
-kubectl describe storageclass standard -n dev
+```kubectl describe storageclass standard -n dev```
 
-kubectl apply -f storage-fast.yml -n dev
+```kubectl apply -f storage-fast.yml -n dev```
 
-kubectl apply -f mongo-claim-dynamic.yml -n dev
+```kubectl apply -f mongo-claim-dynamic.yml -n dev```
 
-kubectl get persistentvolume -n dev
+```kubectl get persistentvolume -n dev```
+
+
+## HW31
+
+Install helm locally
+
+```kubectl apply -f tiller.yml```
+
+```helm init --service-account tiller```
+
+```kubectl get pods -n kube-system --selector app=helm```
+
+```helm install --name test-ui-1 ui/```
+
+```kubectl get event```
+
+```helm ls```
+
+```helm install ui --name ui-1```
+
+```helm install ui --name ui-2```
+
+```helm install ui --name ui-3```
+
+```kubectl get ingress```
+
+```helm upgrade ui-1 ui/```
+
+Download dependencies for reddit
+
+```helm dep update```
+
+```helm search mongo```
+
+```helm install reddit --name reddit-test```
+
+```helm dep update ./reddit```
+
+```helm upgrade reddit-test ./reddit```
+
+
+# GitLab +  Kubernetes
+
+```helm repo add gitlab https://charts.gitlab.io```
+
+```helm fetch gitlab/gitlab-omnibus --version 0.1.36 --untar```
+
+```cd gitlab-omnibus```
+
+```helm init --upgrade --tiller-image gcr.io/kubernetes-helm/tiller:v2.7.2```
+
+Downgrade helm locally to 2.7.2
+
+```helm install --name gitlab . -f values.yaml```
+
+```kubectl get service -n nginx-ingress nginx```
+
+```echo "35.233.107.111 gitlab-gitlab staging production" >> /etc/hosts```
+
+```kubectl get pods```
+
+```helm del --purge gitlab```
+
+```helm ls --all gitlab```
+
+Watch the status:
+
+```kubectl get deployment -w gitlab-gitlab --namespace default```
+
+```kubectl get svc -w --namespace nginx-ingress nginx```
+
+```kubectl exec -it elasticsearch-attiy sh```
+
+```kubectl logs elasticsearch-attiy -p```
+
+Persistent volume claim:
+```kubectl get pvc```
+
+```kubectl get deployment,svc,pods,pvc,rc,rs```
+
+```kubectl delete pod -n kube-lego kube-lego-75cf85bd4b-k9xz6```
+
+```helm status gitlab```
+
+```helm list```
+
+/home/Anton/Projects/lakostin_microservices/Gitlab_ci/ui/.git/
+
+```git init```
+
+```git remote add origin http://gitlab-gitlab/mrkostin/ui.git```
+
+```git add .```
+
+```git commit -m “init”```
+
+```git push origin master```
+
+ui:
+
+```git checkout -b feature/3```
