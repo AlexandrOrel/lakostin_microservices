@@ -820,3 +820,71 @@ Persistent volume claim:
 ui:
 
 ```git checkout -b feature/3```
+
+
+## HW32
+
+```gcloud beta container --project "docker-204007" clusters create \```
+```"cluster-1" --zone "europe-west1-d" --username "admin" \```
+```--cluster-version "1.8.10-gke.0" --machine-type "g1-small" \```
+```--image-type "COS" --disk-type "pd-standard" --disk-size "100" \```
+```--scopes "https://www.googleapis.com/auth/compute",\```
+```"https://www.googleapis.com/auth/devstorage.read_only",\```
+```"https://www.googleapis.com/auth/logging.write",\```
+```"https://www.googleapis.com/auth/monitoring",\```
+```"https://www.googleapis.com/auth/servicecontrol",\```
+```"https://www.googleapis.com/auth/service.management.readonly",\```
+```"https://www.googleapis.com/auth/trace.append" --num-nodes "2" \```
+```--no-enable-cloud-logging --no-enable-cloud-monitoring --network \```
+```"default" --subnetwork "default" --enable-legacy-authorization \```
+```--addons HorizontalPodAutoscaling,HttpLoadBalancing,\```
+```KubernetesDashboard --enable-autorepair```
+
+
+```helm install stable/nginx-ingress --name nginx```
+
+```helm del --purge nginx```
+
+```kubectl get svc```
+
+```git clone https://github.com/kubernetes/charts.git kube-charts```
+
+```cd kube-charts ; git fetch origin pull/2767/head:prom_2.0```
+
+```git checkout prom_2.0 ; cd ..```
+
+```cp -r kube-charts/stable/prometheus ./```
+
+```rm -r kube-charts```
+
+```cd prometheus```
+
+```helm upgrade prom . -f custom_values.yml --install```
+
+Before installing reddit:
+
+```helm dep update```
+
+```helm upgrade reddit-test . --install```
+
+```helm upgrade production --namespace production ./reddit --install```
+
+```helm upgrade staging --namespace staging ./reddit --install```
+
+```helm upgrade prom . -f custom_values.yml --install```
+
+```helm upgrade --install grafana stable/grafana --set "adminPassword=admin" \```
+```--set "service.type=NodePort" \```
+```--set "ingress.enabled=true" \```
+```--set "ingress.hosts={reddit-grafana}"```
+
+
+```kubectl label node gke-cluster-1-pool-1-256c8968-hbsb elastichost=true```
+
+```kubectl apply -f ./efk```
+
+```helm upgrade --install kibana stable/kibana \```
+```--set "ingress.enabled=true" \```
+```--set "ingress.hosts={reddit-kibana}" \```
+```--set "env.ELASTICSEARCH_URL=http://elasticsearch-logging:9200" \```
+```--version 0.1.1```
